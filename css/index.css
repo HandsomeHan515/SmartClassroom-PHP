@@ -1,0 +1,138 @@
+.index-jumbotron {
+    background-image: url("../img/bg.png");
+    color: #FFFFFF;
+    padding-bottom: 100px;
+    margin-bottom: 0;
+    text-align: center;
+}
+.index-jumbotron h1 {
+    font-size: 100px;
+}
+
+.index-nav {
+    border-radius: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+}
+
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    background-color: #EFEEE4;
+}
+
+.center {
+    margin: 0 auto;
+    float: none;
+}
+
+.text-center {
+    text-align: center;
+}
+
+#site-body {
+    min-height: 100%;
+    padding-top: 100px;
+    height: auto;
+    margin: 0 auto -80px;
+    padding-bottom: 80px;
+}
+
+.site-nav {
+    border-radius: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+}
+
+.dropdown-menu>li>a{
+    color: #000000;
+}
+
+.search-area {
+    /*set center*/
+    margin: 0 auto 20px;
+    float: none;
+
+    padding: 40px 29px 45px;
+    background-color: #FFFFFF;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+.search-area .search-title {
+    font-size: 22.5px;
+    margin-bottom: 30px;
+    font-weight: 100;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.search-form {
+}
+
+.search-form input[type="text"] {
+    font-weight: bolder;
+}
+
+.search-form input[type="password"] {
+    height: auto;
+    margin-bottom: 15px;
+    padding: 7px 9px;
+    font-weight: bolder;
+}
+
+.search-area .search-form .help-block {
+    font-size: 12.3px;
+    color: #18BC9C;
+}
+
+.search-area .search-control {
+    word-spacing: 10px;
+    text-align: center;
+}
+
+.footer {
+    position: absolute;
+    width: 100%;
+    height: 80px;
+    /*margin-top: 50px;*/
+    padding-top: 20px;
+    /*padding-bottom: 20px;*/
+    text-align: center;
+    background-color: #2C3E50;
+    color: #ffffff;
+    padding-bottom: 20px;
+}
+
+.footer img {
+    height: 20px;
+    left: 1%;
+    right: 1%;
+    background-color: #356F94;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    border-radius:50px;
+}
+
+.panel-footer a {
+    font-weight: bold;
+    color: #000000;
+}
+
+.panel-footer .btn-default {
+    font-weight: bold;
+    background-color: #ffffff;
+}
+
+.panel-footer .btn-default:hover {
+    font-weight: bold;
+    background-color: #2C3E50;
+}
