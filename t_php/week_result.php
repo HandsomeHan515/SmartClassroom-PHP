@@ -5,7 +5,6 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> 
 	<title>周查询结果</title>
-	<!-- Loading Bootstrap -->
 	<link rel="stylesheet" href="../css/bootstrap.min.css">
 	<script src="../js/jquery-1.12.3.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
@@ -15,8 +14,7 @@
 	<div class="navbar navbar-inverse index-nav">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse"
-                        data-target=".navbar-responsive-collapse">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -38,40 +36,35 @@
         </div>
 	</div>
 	<!-- /navbar -->
-<?php
-	header("Content-Type: text/html; charset=utf-8");
-	$con = mysqli_connect("localhost","root","","classroom");
-	mysqli_query($con,"set names utf8"); 
-	if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	    $weeks =$_POST["weeks"];
-
-	}
-	if (!$con) {
-		die('Could not connect: ' . mysqli_error());
-	}
-	$result = mysqli_query($con,"SELECT id,sum(stay_time),count(*) from week_date,checkin where weeks= '".$weeks."' and week_date.date = checkin.date GROUP BY id order by sum(stay_time) desc");
-	echo "<div class='col-md-1'></div>";
-	echo "<div class='col-md-10'>";
-		echo "<table class='table table-bordered table-striped table-hover'>";
-			echo "<thead>
-				<tr>
-					<th style='text-align: center;'>姓名</th>
-					<th style='text-align: center;'>签到时长</th>
-					<th style='text-align: center;'>签到次数</th>
-				</tr>
-				</thead>"; 
-			echo "<tbody>";
-				while($row = mysqli_fetch_array($result))
-	  			{
-	  				echo "<tr>
-	  					<td style='text-align: center;'><a href='name.php?name=".$row['id']."&week=".$weeks."'>".$row['id']."</a></td>
-	  					<td style='text-align: center;'>".(($row['sum(stay_time)']/60)%100000)."小时".($row['sum(stay_time)']%60)."分钟</td>
-	  					<td style='text-align: center;'>".$row['count(*)']."</td>
-	  				</tr>";
-	  			}
-			echo "</tbody>";
-		echo "</table>";
-	echo "</div>";
-	echo "<div class='col-md-1'></div>";
-	mysqli_close($con);
-?>
+	<div class="container">
+		<div class="col-md-10 col-md-offset-1">
+			<table class='table table-bordered table-striped table-hover'>
+				<thead>
+					<tr>
+						<th style='text-align: center;'>姓名</th>
+						<th style='text-align: center;'>签到时长</th>
+						<th style='text-align: center;'>签到次数</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+						include 'head.php';
+						if($_SERVER["REQUEST_METHOD"] == "POST") {
+	    					$weeks =$_POST["weeks"];
+						}
+						$result = mysqli_query($con,"SELECT name,sum(stay_time),count(*) from week_date,checkin where weeks= '".$weeks."' and week_date.date = checkin.date GROUP BY name order by sum(stay_time) desc");
+						while($row = mysqli_fetch_array($result)) {
+			  				echo "<tr>
+			  					<td style='text-align: center;'><a href='name.php?name=".$row['name']."&week=".$weeks."'>".$row['name']."</a></td>
+			  					<td style='text-align: center;'>".(($row['sum(stay_time)']/60)%100000)."小时".($row['sum(stay_time)']%60)."分钟</td>
+			  					<td style='text-align: center;'>".$row['count(*)']."</td>
+			  				</tr>";
+			  			}
+			  			mysqli_close($con);
+					?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

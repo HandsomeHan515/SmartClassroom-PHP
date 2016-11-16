@@ -14,8 +14,7 @@
 	<div class="navbar navbar-inverse index-nav">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse"
-                        data-target=".navbar-responsive-collapse">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -37,39 +36,38 @@
         </div>
 	</div>
 	<!-- /navbar -->
-<?php
-	header("Content-Type: text/html; charset=utf-8");
-	$con = mysqli_connect("localhost","root","","classroom");
-	mysqli_query($con,"set names utf8");
-	$result = mysqli_query($con,"select id,count(*),SUM(stay_time),count(case when end='not_logout' then 1 else null end) unsign, count(case when end<>'not_logout' then 1 else null end) signed from checkin group by id order by count(*) desc,SUM(stay_time) desc");
-	echo "<div class='col-md-1'></div>";
-	echo "<div class='col-md-10'>";
-		echo "<iframe src='chart.php' width='100%' height='200' frameborder='no' border='0'allowtransparency='yes'> </iframe>";
-		echo "<table class='table table-bordered table-striped table-hover'>";
-			echo "<thead>
-				<tr>
-					<th style='text-align: center;'>排名</th>
-					<th style='text-align: center;'>姓名</th>
-					<th style='text-align: center;'>总签到次数</th>
-					<th style='text-align: center;'>净签到次数</th>
-					<th style='text-align: center;'>未签退次数</th>
-				</tr>
+	<div class="container-fluid">
+		<div class="col-md-10 col-md-offset-1">
+			<table class='table table-bordered table-striped table-hover'>
+				<thead>
+					<tr>
+						<th style='text-align: center;'>排名</th>
+						<th style='text-align: center;'>姓名</th>
+						<th style='text-align: center;'>总签到次数</th>
+						<th style='text-align: center;'>净签到次数</th>
+						<th style='text-align: center;'>未签退次数</th>
+					</tr>
 				</thead>
-				<tbody>";
-	$line=1;
-	while($row = mysqli_fetch_array($result)) {
-		echo "<tr>
-			<td style='text-align: center;'>".$line++."</td>
-			<td style='text-align: center;'><a href='name.php?name=".$row['id']."'>".$row['id']."</a></td>
-			<td style='text-align: center;'>".$row['count(*)']."</td>
-			<td style='text-align: center;'>".$row['signed']."</td>
-			<td style='text-align: center;'>".$row['unsign']."</td>
-		</tr>";
-	  }
-	echo "</tbody></table>";
-	echo "</div>";
-	echo "<div class='col-md-1'></div>";
-	mysqli_close($con);
-?>
+				<tbody>
+					<?php
+						include 'head.php';
+						echo "<iframe src='chart.php' width='100%' height='300' style='margin-bottom: 2em;' frameborder='no' border='0' allowtransparency='yes'></iframe>";
+						$line=1;
+						$result = mysqli_query($con,"select name,count(*),SUM(stay_time),count(case when end='not_logout' then 1 else null end) unsign, count(case when end<>'not_logout' then 1 else null end) signed from checkin group by name order by count(*) desc,SUM(stay_time) desc");
+						while($row = mysqli_fetch_array($result)) {
+							echo "<tr>
+								<td style='text-align: center;'>".$line++."</td>
+								<td style='text-align: center;'><a href='name.php?name=".$row['name']."'>".$row['name']."</a></td>
+								<td style='text-align: center;'>".$row['count(*)']."</td>
+								<td style='text-align: center;'>".$row['signed']."</td>
+								<td style='text-align: center;'>".$row['unsign']."</td>
+							</tr>";
+						  }
+						mysqli_close($con);
+					?>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </body>
 </html>

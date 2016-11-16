@@ -49,7 +49,7 @@
 	//判断时间结束
 	//将新数据插入到checkin数据库中
 	$checkin = false;
-	$message = mysqli_query($con, "select * from checkin where (id = '$name' and duration = '$duration' and date = '$day')");
+	$message = mysqli_query($con, "select * from checkin where (name = '$name' and duration = '$duration' and date = '$day')");
 	while($row = mysqli_fetch_array($message)) {
 		echo $row['start']."<br>";
 		echo $row['duration']."<br>";
@@ -57,7 +57,7 @@
 		$checkin = true;
 	}
 	if(!$checkin) {
-		mysqli_query($con, "insert into checkin (id,start,duration,ip,date) values ('$name','$nowtime','$duration','$ip','$day')");
+		mysqli_query($con, "insert into checkin (name,start,duration,ip,date) values ('$name','$nowtime','$duration','$ip','$day')");
 	}
 	
 ?>

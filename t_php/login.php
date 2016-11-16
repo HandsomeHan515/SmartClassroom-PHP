@@ -1,17 +1,9 @@
 <?php
-    header("Content-Type:text/html; charset=utf-8");
-	$con = mysqli_connect("localhost","root","","classroom");
-	mysqli_query($con, "set names utf8;");
+    include 'head.php';
 	date_default_timezone_set("PRC");//时区设置
-	
-//	mysql_connect("localhost","root","");
-//	mysql_select_db("classroom");
-//	mysql_query("set names utf8");
-	
 	//从表单中获得提交RFID卡号
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $rfid = $_POST["rfid"];
-//		$room = $_POST["ROOM"];
     }
     //获取时间信息
     $time=date("Y-m-d H:i:s");
@@ -37,16 +29,14 @@
 		$name = $row['name'];
 	}
 	$checkined=false;
-    $exist=false;
     // 签到将获取的学生信息数据存到checkin数据库中
-    $result2 = mysqli_query($con, "SELECT * FROM checkin where id = '$name' and duration = '".$duration."'and date = '".$day."'");
+    $result2 = mysqli_query($con, "SELECT * FROM checkin where name = '$name' and duration = '".$duration."'and date = '".$day."'");
     while($row = mysqli_fetch_array($result2)) {
         $start=$row['start'];
         $checkined=true;
     }
-    if (!$checkined)
-    {
-		mysqli_query($con,"INSERT INTO checkin (id, start, duration, date) VALUES ('".$name."','".$nowtime."','".$duration."','".$day."')");
+    if (!$checkined) {
+		mysqli_query($con,"INSERT INTO checkin (name, start, duration, date) VALUES ('".$name."','".$nowtime."','".$duration."','".$day."')");
 		 echo "<script>window.location='./result.php';</script>";
 	}else {
 	    $end=$nowtime;
@@ -57,13 +47,12 @@
 	    $SS=substr($start,6,2);
 	    $ss=substr($end,6,2);
 	    $stay_time=$hh*60*60+$mm*60+$ss- ($HH*60*60+$MM*60+$SS);
-	    //$HH=($stay_time/3600)%100;
-	    //$MM=(($stay_time%3600)/60)%60;
 	    $stay_time=($stay_time/60)%600;//=$HH."小时".$MM."分";
-	    mysqli_query($con,"UPDATE checkin set end='".$nowtime."' ,stay_time='".$stay_time."' where id = '".$name."' and duration = '".$duration."'and date = '". $day."'");
+	    mysqli_query($con,"UPDATE checkin set end='".$nowtime."' ,stay_time='".$stay_time."' where name = '".$name."' and duration = '".$duration."'and date = '". $day."'");
 		 echo "<script>alert('你好，你已签退成功！！！');window.location='./result.php';</script>";
 	}
     // 将获取的时间数据存到数据库中
+    $exist=false;
 	$result3 = mysqli_query($con, "SELECT * FROM week_date where date = '".$day."'");
     while($row = mysqli_fetch_array($result3)) {
         $exist=true;

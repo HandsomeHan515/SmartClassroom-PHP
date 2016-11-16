@@ -46,15 +46,15 @@
 if(isset($_GET["name"])&&(!isset($_GET["week"]))&&(!isset($_GET["month"]))) {
 	echo "<h4 style='margin-left:18%;'>".$_GET["name"]."的考勤记录：</h4>";
 //  $sql="SELECT * FROM checkin where id = '".$_GET["name"]."' order by date desc,start";
-	$result = mysqli_query($con, "SELECT * FROM checkin where id = '".$_GET["name"]."' order by date desc,start");
+	$result = mysqli_query($con, "SELECT * FROM checkin where name = '".$_GET["name"]."' order by date desc,start");
 }else if(isset($_GET["name"])&&(isset($_GET["week"]))&&(!isset($_GET["month"]))) {
 	echo "<h4 style='margin-left:18%;'>".$_GET["name"]."在第".$_GET["week"]."周的记录：</h4>";
 //  $sql="SELECT id,start,end,stay_time,duration,checkin.date,ip from week_date,checkin where weeks= '".$_GET["week"]."' and week_date.date = checkin.date and id='".$_GET["name"]."'";
-	$result = mysqli_query($con,"SELECT id,start,end,stay_time,duration,checkin.date,ip from week_date,checkin where weeks= '".$_GET["week"]."' and week_date.date = checkin.date and id='".$_GET["name"]."'");
+	$result = mysqli_query($con,"SELECT name,start,end,stay_time,duration,checkin.date,ip from week_date,checkin where weeks= '".$_GET["week"]."' and week_date.date = checkin.date and name='".$_GET["name"]."'");
 }else if(isset($_GET["name"])&&(!isset($_GET["week"]))&&(isset($_GET["month"]))) {
 	echo "<h4 style='margin-left:18%;'>".$_GET["name"]."在".$_GET["month"]."的记录：</h4>";
 //  $sql="SELECT * FROM checkin where id = '".$_GET["name"]."' and date like '".$_GET["month"]."%' order by date desc,start";
-	$result = mysqli_query($con,"SELECT * FROM checkin where id = '".$_GET["name"]."' and date like '".$_GET["month"]."%' order by date desc,start");
+	$result = mysqli_query($con,"SELECT * FROM checkin where name = '".$_GET["name"]."' and date like '".$_GET["month"]."%' order by date desc,start");
 }
 //$result = mysqli_query($sql);
 echo "<div class='col-md-1'></div>";
@@ -75,7 +75,7 @@ echo "<thead>
 while($row = mysqli_fetch_array($result))
   {
   	echo "<tr>
-  		<td style='text-align: center;'>".$row['id']."</td>
+  		<td style='text-align: center;'>".$row['name']."</td>
   		<td style='text-align: center;'>".$row['start']."</td>
   		<td style='text-align: center;'>".$row['end']."</td>
   		<td style='text-align: center;'>".(($row['stay_time']/60)%1000).":".($row['stay_time']%60)."</td>

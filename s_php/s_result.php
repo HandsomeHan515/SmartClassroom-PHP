@@ -14,8 +14,7 @@
 	<div class="navbar navbar-inverse index-nav">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse"
-                        data-target=".navbar-responsive-collapse">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -33,43 +32,39 @@
         </div>
 	</div>
 	<!-- /navbar -->
+	<div class="container">
+		<div class="col-md-10 col-md-offset-1">
+			<table class='table table-bordered table-striped table-hover'>
+				<thead>
+					<tr>
+						<th style='text-align: center;'>姓名</th>
+						<th style='text-align: center;'>签到时间</th>
+						<th style='text-align: center;'>签退时间</th>
+						<th style='text-align: center;'>签到时长</th>
+						<th style='text-align: center;'>时间段</th>
+						<th style='text-align: center;'>日期</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php 
+						include 'head.php';
+						$result = mysqli_query($con,"SELECT * FROM checkin order by date desc,start desc LIMIT 200");
+						while($row = mysqli_fetch_array($result)) {
+		 	        		echo "<tr>
+			 	        		<td style='text-align: center;'>".$row['name']."</td>
+			 	        		<td style='text-align: center;'>".$row['start']."</td>
+			 	        		<td style='text-align: center;'>".$row['end']."</td>
+			 	        		<td style='text-align: center;'>".(($row['stay_time']/60)%10)."小时".($row['stay_time']%60)."分钟</td>
+			 	        		<td style='text-align: center;'>".$row['duration']."</td>
+			 	        		<td style='text-align: center;'>".$row['date']."</td>
+			 	        	</tr>";
+						}
+						mysqli_close($con);
+					?>
+	 	        	
+	 	        </tbody>
+			</table>
+		 </div>
+	</div>
 </body>
 </html>
-<?php
-	header("Content-Type: text/html; charset=utf-8");
-	$con = mysqli_connect("localhost","root","","classroom");
-	mysqli_query($con, "set names utf8");
-	if (!$con) {
-		die('Could not connect: ' . mysqli_error());
-	}
-	$result = mysqli_query($con,"SELECT * FROM checkin order by date desc,start desc LIMIT 200");
-	echo "<div class='col-md-1'></div>
-	<div class='col-md-10'>
-		<table class='table table-bordered table-striped table-hover'>
-			<thead>
-				<tr>
-					<th style='text-align: center;'>姓名</th>
-					<th style='text-align: center;'>签到时间</th>
-					<th style='text-align: center;'>签退时间</th>
-					<th style='text-align: center;'>签到时长</th>
-					<th style='text-align: center;'>时间段</th>
-					<th style='text-align: center;'>日期</th>
-				</tr>
-			</thead>
-			<tbody>";
-	        	while($row = mysqli_fetch_array($result)) {
-	 	        	echo "<tr>
-	 	        		<td style='text-align: center;'><a href='name.php?name=".$row['id']."'>".$row['id']."</a></td>
-	 	        		<td style='text-align: center;'>".$row['start']."</td>
-	 	        		<td style='text-align: center;'>".$row['end']."</td>
-	 	        		<td style='text-align: center;'>".(($row['stay_time']/60)%10)."小时".($row['stay_time']%60)."分钟</td>
-	 	        		<td style='text-align: center;'>".$row['duration']."</td>
-	 	        		<td style='text-align: center;'>".$row['date']."</td>
-	 	        	</tr>";
-	    		}
-	  echo "</tbody>
-		</table>
-	 </div>
-	<div class='col-md-1'></div>";
-	mysqli_close($con);
-?>

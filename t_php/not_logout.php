@@ -1,3 +1,19 @@
+<?php
+	include 'head.php';
+	date_default_timezone_set("PRC");//时区设置
+	$time=date("Y-m-d H:i:s");
+	$day = substr($time,0,10);
+	$time = substr($time,11,2);
+	if($time>=1&&$time<12) {
+        $duration="morning";
+    }
+    if($time>=12&&$time<18) {
+        $duration="afternoon";
+    }
+    if($time>=18&&$time<=24) {
+        $duration="evening";
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,94 +53,86 @@
         </div>
 	</div>
 	<!-- /navbar -->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<?php
+					echo "<h2>".$day." ".$duration."的出勤信息</h2>";
+				?>
+			</div>
+		</div>
+		<div class="col-md-5">
+			<h2>班级学生信息汇总</h2>
+			<table class='table table-bordered table-striped table-hover'>
+				<thead>
+					<tr>
+						<th style='text-align: center;'>姓名</th>
+						<th style='text-align: center;'>电话</th>
+						<th style='text-align: center;'>邮箱</th>
+						<th style='text-align: center;'>出勤次数</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+						$result = mysqli_query($con,"SELECT * FROM student where cid = '1'");
+						while($row = mysqli_fetch_array($result)) {
+							echo "<tr>
+								<td style='text-align: center;'>".$row['name']."</td>
+								<td style='text-align: center;'>".$row['phone']."</td>
+								<td style='text-align: center;'>".$row['email']."</td>
+								<td style='text-align: center;'>".$row['times']."</td>
+							</tr>";
+						}
+					?>
+				</tbody>
+			</table>
+		</div>
+		<div class="col-md-4">
+			<h2>已出勤学生信息</h2>
+			<table class='table table-bordered table-striped table-hover'>
+				<thead>
+					<tr>
+						<th style='text-align: center;'>姓名</th>
+						<th style='text-align: center;'>签到时间</th>
+						<th style='text-align: center;'>签退时间</th>
+						<th style='text-align: center;'>时间段</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+						$result = mysqli_query($con, "select * from checkin where date = '$day'");	
+						while($row = mysqli_fetch_array($result)) {
+							echo "<tr>
+								<td style='text-align: center;'>".$row['name']."</td>
+								<td style='text-align: center;'>".$row['start']."</td>
+								<td style='text-align: center;'>".$row['end']."</td>
+								<td style='text-align: center;'>".$row['duration']."</td>
+							</tr>";
+						}
+					?>
+				</tbody>
+			</table>
+		</div>
+		<div class="col-md-3">
+			<h2>未出勤的学生</h2>
+			<table class='table table-bordered table-striped table-hover'>
+				<thead>
+					<tr>
+						<th style='text-align: center;'>姓名</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+						$result = mysqli_query($con,"SELECT name FROM student WHERE NOT EXISTS(SELECT name FROM checkin WHERE checkin.name = student.name and date='$day' and duration = '$duration')");
+						while ($row = mysqli_fetch_array($result)) {
+							echo "<tr>
+								<td style='text-align: center;'>".$row['name']."</td>
+							</tr>";
+						}
+						mysqli_close($con);
+					?>
+				</tbody>
+		</div>
+	</div>
 </body>
 </html>
-<?php
-	header("Content-Type: text/html; charset=utf-8");
-	$con = mysqli_connect("localhost","root","","classroom");
-	date_default_timezone_set("PRC");//时区设置
-	mysqli_query($con,"set names utf8");
-	if (!$con) {
-		die('Could not connect: ' . mysqli_error());
-	}
-	$time=date("Y-m-d H:i:s");
-	$day = substr($time,0,10);
-	$time = substr($time,11,2);
-	if($time>=1&&$time<12) {
-        $duration="morning";
-    }
-    if($time>=12&&$time<18) {
-        $duration="afternoon";
-    }
-    if($time>=18&&$time<=24) {
-        $duration="evening";
-    }
-	echo "<h2>".$day.$duration."的出勤信息</h2>";
-	$result = mysqli_query($con,"SELECT * FROM student where cid = '1'");
-	echo "<div class='col-md-5'>
-		<h2>班级学生信息汇总</h2>
-		<table class='table table-bordered table-striped table-hover'>
-			<thead>
-				<tr>
-					<th style='text-align: center;'>姓名</th>
-					<th style='text-align: center;'>电话</th>
-					<th style='text-align: center;'>邮箱</th>
-					<th style='text-align: center;'>出勤次数</th>
-				</tr>
-			</thead>
-			<tbody>";
-				while($row = mysqli_fetch_array($result)) {
-					echo "<tr>
-						<td style='text-align: center;'>".$row['name']."</td>
-						<td style='text-align: center;'>".$row['phone']."</td>
-						<td style='text-align: center;'>".$row['email']."</td>
-						<td style='text-align: center;'>".$row['times']."</td>
-					</tr>";
-				}
-			echo "<tbody>
-			</table>
-	</div>";
-	echo "<div class='col-md-5'>";
-	$result = mysqli_query($con, "select * from checkin where date = '$day'");	
-	echo"<h2>已出勤学生信息</h2>
-		<table class='table table-bordered table-striped table-hover'>
-			<thead>
-				<tr>
-					<th style='text-align: center;'>姓名</th>
-					<th style='text-align: center;'>签到时间</th>
-					<th style='text-align: center;'>签退时间</th>
-					<th style='text-align: center;'>时间段</th>
-				</tr>
-			</thead>
-			<tbody>";
-				while($row = mysqli_fetch_array($result)) {
-					echo "<tr>
-						<td style='text-align: center;'>".$row['id']."</td>
-						<td style='text-align: center;'>".$row['start']."</td>
-						<td style='text-align: center;'>".$row['end']."</td>
-						<td style='text-align: center;'>".$row['duration']."</td>
-					</tr>";
-				}
-			echo "<tbody>
-			</table>
-	</div>";
-	echo"<div class='col-md-2'>";
-		$result = mysqli_query($con,"SELECT name FROM student WHERE NOT EXISTS(SELECT id FROM checkin WHERE checkin.id = student.name and date='$day' and duration = '$duration')");
-		echo "<h2>未出勤的学生</h2>
-		<table class='table table-bordered table-striped table-hover'>
-			<thead>
-				<tr>
-					<th style='text-align: center;'>姓名</th>
-				</tr>
-			</thead>
-			<tbody>"; 
-			while ($row = mysqli_fetch_array($result)) {
-				echo "<tr>
-					<td style='text-align: center;'>".$row['name']."</td>
-				</tr>";
-			}
-	echo "</tbody>
-		</table>
-	</div>";
-	mysqli_close($con);
-?>

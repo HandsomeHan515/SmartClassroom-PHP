@@ -1,3 +1,19 @@
+<?php
+	include 'head.php';
+	if ($_SERVER["REQUEST_METHOD"] == "POST") {
+		$name = test_input($_POST['name']);
+	}
+	$result = mysqli_query($con, "select * from class where name='$name'");
+	while($row = mysqli_fetch_array($result)) {
+		$class_one = $row['class_one'];
+		$class_two = $row['class_two'];
+		$class_three = $row['class_three'];
+		$class_four = $row['class_four'];
+		$class_five = $row['class_five'];
+		$class_six = $row['class_six'];
+	}
+	mysqli_close($con);
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -14,8 +30,7 @@
 	<div class="navbar navbar-inverse index-nav">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse"
-                        data-target=".navbar-responsive-collapse">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -33,105 +48,82 @@
         </div>
 	</div>
 	<!-- /navbar -->
-	<?php
-		header("Content-Type:text/html; charset=utf-8");
-		$con = mysqli_connect("localhost","root","","classroom");
-		mysqli_query($con, "set names utf8;");
-		if (!$con) {
-			die('Could not connect: ' . mysqli_error());
-		}
-		$name = $_POST['name'];
-		$result = mysqli_query($con, "select * from class where name='$name'");
-		while($row = mysqli_fetch_array($result)) {
-			$class_one = $row['class_one'];
-			$class_two = $row['class_two'];
-			$class_three = $row['class_three'];
-			$class_four = $row['class_four'];
-			$class_five = $row['class_five'];
-			$class_six = $row['class_six'];
-		}
-		echo "<div class='container'>
-			<div class='row'>
-				<div class='col-md-2'></div>
-				<div class='col-md-8'>
-				<h3>".$name."的课表</h3>
-					<table class='table table-striped table-bordered table-hover table-condensed'>
-						<thead>
-							<tr>
-								<th style='text-align: center;'>课程/时间</th>
-								<th style='text-align: center;'>星期一</th>
-								<th style='text-align: center;'>星期二</th>
-								<th style='text-align: center;'>星期三</th>
-								<th style='text-align: center;'>星期四</th>
-								<th style='text-align: center;'>星期五</th>
-								<th style='text-align: center;'>星期六</th>
-								<th style='text-align: center;'>星期日</th>
-							</tr>
-							<tr><td></td></tr>
-							<tr>
-								<td style='text-align: center;'>一二节课</td>
-								<td style='text-align: center;'>$class_one</td>
-								<td style='text-align: center;'>$class_two</td>
-								<td style='text-align: center;'>$class_three</td>
-								<td style='text-align: center;'>$class_four</td>
-								<td style='text-align: center;'>$class_five</td>
-								<td style='text-align: center;'>$class_six</td>
-								<td style='text-align: center;'></td>	
-							</tr>
-							<tr><td></td></tr>
-							<tr>
-								<td style='text-align: center;'>三四节课</td>
-								<td style='text-align: center;'>$class_two</td>
-								<td style='text-align: center;'>$class_three</td>
-								<td style='text-align: center;'>$class_four</td>
-								<td style='text-align: center;'>$class_five</td>
-								<td style='text-align: center;'>$class_six</td>
-								<td style='text-align: center;'>$class_one</td>
-								<td style='text-align: center;'></td>	
-							</tr>
-							<tr><td></td></tr>
-							<tr>
-								<td style='text-align: center;'>五六节课</td>
-								<td style='text-align: center;'>$class_one</td>
-								<td style='text-align: center;'>$class_two</td>
-								<td style='text-align: center;'>$class_three</td>
-								<td style='text-align: center;'>$class_four</td>
-								<td style='text-align: center;'>$class_five</td>
-								<td style='text-align: center;'>$class_six</td>
-								<td style='text-align: center;'></td>		
-							</tr>
-							<tr><td></td></tr>
-							<tr>
-								<td style='text-align: center;'>七八节课</td>
-								<td style='text-align: center;'>$class_two</td>
-								<td style='text-align: center;'>$class_three</td>
-								<td style='text-align: center;'>$class_four</td>
-								<td style='text-align: center;'>$class_five</td>
-								<td style='text-align: center;'>$class_six</td>
-								<td style='text-align: center;'>$class_one</td>
-								<td style='text-align: center;'></td>
-							</tr>
-							<tr><td></td></tr>
-							<tr>
-								<td style='text-align: center;'>九十节课</td>
-								<td style='text-align: center;'></td>
-								<td style='text-align: center;'></td>
-								<td style='text-align: center;'></td>
-								<td style='text-align: center;'></td>
-								<td style='text-align: center;'></td>
-								<td style='text-align: center;'></td>
-								<td style='text-align: center;'></td>	
-							</tr>
-						</thead>
-						<tbody>
-						
-						</tbody>
-					</table>
-				</div>
-				<div class='col-md-2'></div>
+	<div class='container'>
+		<div class='row'>
+			<div class='col-md-8 col-md-offset-2'>
+			<h3><?php echo $name; ?>的课表</h3>
+				<table class='table table-striped table-bordered table-hover table-condensed'>
+					<thead>
+						<tr>
+							<th style='text-align: center;'>课程/时间</th>
+							<th style='text-align: center;'>星期一</th>
+							<th style='text-align: center;'>星期二</th>
+							<th style='text-align: center;'>星期三</th>
+							<th style='text-align: center;'>星期四</th>
+							<th style='text-align: center;'>星期五</th>
+							<th style='text-align: center;'>星期六</th>
+							<th style='text-align: center;'>星期日</th>
+						</tr>
+						<tr><td></td></tr>
+						<tr>
+							<td style='text-align: center;'>一二节课</td>
+							<td style='text-align: center;'><?php echo $class_one; ?></td>
+							<td style='text-align: center;'><?php echo $class_two; ?></td>
+							<td style='text-align: center;'><?php echo $class_three; ?></td>
+							<td style='text-align: center;'><?php echo $class_four; ?></td>
+							<td style='text-align: center;'><?php echo $class_five; ?></td>
+							<td style='text-align: center;'><?php echo $class_six; ?></td>
+							<td style='text-align: center;'></td>	
+						</tr>
+						<tr><td></td></tr>
+						<tr>
+							<td style='text-align: center;'>三四节课</td>
+							<td style='text-align: center;'><?php echo $class_four; ?></td>
+							<td style='text-align: center;'><?php echo $class_one; ?></td>
+							<td style='text-align: center;'><?php echo $class_two; ?></td>
+							<td style='text-align: center;'><?php echo $class_six; ?></td>
+							<td style='text-align: center;'><?php echo $class_three; ?></td>
+							<td style='text-align: center;'><?php echo $class_five; ?></td>
+							<td style='text-align: center;'></td>	
+						</tr>
+						<tr><td></td></tr>
+						<tr>
+							<td style='text-align: center;'>五六节课</td>
+							<td style='text-align: center;'><?php echo $class_five; ?></td>
+							<td style='text-align: center;'><?php echo $class_four; ?></td>
+							<td style='text-align: center;'><?php echo $class_one; ?></td>
+							<td style='text-align: center;'><?php echo $class_two; ?></td>
+							<td style='text-align: center;'><?php echo $class_six; ?></td>
+							<td style='text-align: center;'><?php echo $class_three; ?></td>
+							<td style='text-align: center;'></td>		
+						</tr>
+						<tr><td></td></tr>
+						<tr>
+							<td style='text-align: center;'>七八节课</td>
+							<td style='text-align: center;'><?php echo $class_four; ?></td>
+							<td style='text-align: center;'><?php echo $class_one; ?></td>
+							<td style='text-align: center;'><?php echo $class_two; ?></td>
+							<td style='text-align: center;'><?php echo $class_six; ?></td>
+							<td style='text-align: center;'><?php echo $class_three; ?></td>
+							<td style='text-align: center;'><?php echo $class_five; ?></td>
+							<td style='text-align: center;'></td>
+						</tr>
+						<tr><td></td></tr>
+						<tr>
+							<td style='text-align: center;'>九十节课</td>
+							<td style='text-align: center;'></td>
+							<td style='text-align: center;'></td>
+							<td style='text-align: center;'></td>
+							<td style='text-align: center;'></td>
+							<td style='text-align: center;'></td>
+							<td style='text-align: center;'></td>
+							<td style='text-align: center;'></td>	
+						</tr>
+					</thead>
+				</table>
 			</div>
-		</div>";
-	?>
+		</div>
+	</div>
 </body>
 </html>
 	

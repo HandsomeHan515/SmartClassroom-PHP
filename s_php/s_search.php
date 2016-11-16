@@ -40,7 +40,7 @@
 		if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$name = $_POST["name"];
 		}	
-		$result = mysqli_query($con, "SELECT * FROM checkin where id = '$name'");
+		$result = mysqli_query($con, "SELECT * FROM checkin where name = '$name'");
 		echo "<div class='col-md-1'></div>";
 		echo "<div class='col-md-10'>";
 			echo "<h3><strong>&nbsp;".$name."&nbsp;</strong>的签到信息如下：</h3>";
@@ -58,7 +58,7 @@
 				echo "<tbody>";
 		        	while($row = mysqli_fetch_array($result)) {
 		 	        	echo "<tr>
-		 	        		<td style='text-align: center;'>".$row['id']."</td>
+		 	        		<td style='text-align: center;'>".$row['name']."</td>
 		 	        		<td style='text-align: center;'>".$row['start']."</td>
 		 	        		<td style='text-align: center;'>".$row['end']."</td>
 		 	        		<td style='text-align: center;'>".(($row['stay_time']/60)%10)."小时".($row['stay_time']%60)."分钟</td>

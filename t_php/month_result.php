@@ -37,40 +37,35 @@
         </div>
 	</div>
 	<!-- /navbar -->
-<?php
-	header("Content-Type: text/html; charset=utf-8");
-	$con = mysqli_connect("localhost","root","","classroom"); 
-	mysqli_query($con,"set names utf8");
-	if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	    $ymonths =$_POST["ymonth"];
-
-	}
-	if (!$con) {
-	  	die('Could not connect: ' . mysqli_error());
-	}
-	$result = mysqli_query($con,"SELECT id,sum(stay_time),count(*) from week_date,checkin where week_date.date like '".$ymonths."%' and week_date.date = checkin.date GROUP BY id order by sum(stay_time) desc");
-	echo "<div class='col-md-1'></div>";
-	echo "<div class='col-md-10'>";
-		echo "<table class='table table-bordered table-striped table-hover'>";
-			echo "<thead>
-				<tr>
-					<th style='text-align: center;'>姓名</th>
-					<th style='text-align: center;'>签到时长</th>
-					<th style='text-align: center;'>签到次数</th>
-				</tr>
-			</thead>";
-			echo "<tbody>";
-				while($row = mysqli_fetch_array($result))
-	  			{
-	  				echo "<tr>
-	  						<td style='text-align: center;'><a href='name.php?name=".$row['id']."&month=".$ymonths."'>".$row['id']."</a></td>
-	  						<td style='text-align: center;'>".(($row['sum(stay_time)']/60)%100000).":".($row['sum(stay_time)']%60)."</td>
-	  						<td style='text-align: center;'>".$row['count(*)']."</td>
-	  					</tr>";
-	  			}
-			echo "</tbody>";
-		echo "</table>";
-	echo "</div>";
-	echo "<div class='col-md-1'></div>";
-	mysqli_close($con);
-?>
+	<div class="container">
+		<div class="col-md-10 col-md-offset-1">
+			<table class='table table-bordered table-striped table-hover'>";
+				<thead>
+					<tr>
+						<th style='text-align: center;'>姓名</th>
+						<th style='text-align: center;'>签到时长</th>
+						<th style='text-align: center;'>签到次数</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+						include 'head.php';
+						if ($_SERVER["REQUEST_METHOD"] == "POST") {
+						    $ymonths =$_POST["ymonth"];
+						}
+						$result = mysqli_query($con,"SELECT name,sum(stay_time),count(*) from week_date,checkin where week_date.date like '".$ymonths."%' and week_date.date = checkin.date GROUP BY name order by sum(stay_time) desc");
+						while($row = mysqli_fetch_array($result)) {
+							echo "<tr>
+									<td style='text-align: center;'><a href='name.php?name=".$row['id']."&month=".$ymonths."'>".$row['id']."</a></td>
+									<td style='text-align: center;'>".(($row['sum(stay_time)']/60)%100000).":".($row['sum(stay_time)']%60)."</td>
+									<td style='text-align: center;'>".$row['count(*)']."</td>
+								</tr>";
+						}
+						mysqli_close($con);
+					?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>
